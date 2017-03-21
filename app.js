@@ -1,7 +1,20 @@
 const express = require('express');
 const winston = require('winston');
+const mongoose = require('mongoose');
 
-const PORT = 3000;
+const server = process.env.MONGO_SERVER || 'db';
+const database = process.env.MONGO_DB || 'bookshelf';
+const uristring = `mongodb://${server}/${database}`;
+
+const PORT = process.env.PORT || 3000;
+
+mongoose.connect(uristring, (err) => {
+  if (err) {
+    winston.error(`ERROR connecting to: ${uristring}. ${err}`);
+  } else {
+    winston.info(`Succeeded connected to: ${uristring}`);
+  }
+});
 
 const app = express();
 
